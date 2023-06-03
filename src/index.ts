@@ -1,26 +1,23 @@
-import fs from 'fs';
+import { CsvFileReader } from './CsvFileReader';
+import { dateStringToDate } from './utils';
+import { MatchResult } from './MatchResult';
 
-const matches = fs
-  .readFileSync('football.csv', {
-    encoding: 'utf-8',
-  })
-  .split('\n')
-  .map((match: string): string[] => match.split(','));
+type MatchData = [Date, string, string, number, number, MatchResult, string];
 
-enum MatchResult {
-  HomeWin = 'H',
-  AwayWin = 'A',
-  Draw = 'D',
-}
+const reader = new CsvFileReader('football.csv');
+reader.read();
+const matches = reader.data;
 
 const manWins =
   matches.filter(
-    (match: string[]): boolean =>
+    (match: MatchData): boolean =>
       match[1] === 'Man United' && match[5] === MatchResult.HomeWin
   ).length +
   matches.filter(
-    (match: string[]): boolean =>
+    (match: MatchData): boolean =>
       match[2] === 'Man United' && match[5] === MatchResult.AwayWin
   ).length;
 
 console.log(manWins);
+
+console.log(dateStringToDate('15/05/2023'));
