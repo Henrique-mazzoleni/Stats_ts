@@ -7,4 +7,12 @@ const matches = fs
   .split('\n')
   .map((match: string): string[] => match.split(','));
 
-console.log(matches);
+const manWins =
+  matches.filter(
+    (match: string[]): boolean => match[1] === 'Man United' && match[5] === 'H'
+  ).length +
+  matches.filter(
+    (match: string[]): boolean => match[2] === 'Man United' && match[5] === 'A'
+  ).length;
+
+console.log(manWins);
