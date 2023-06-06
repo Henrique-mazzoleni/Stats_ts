@@ -1,24 +1,23 @@
 import { MatchReader } from './MatchReader';
 import { CsvFileReader } from './CsvFileReader';
-import { dateStringToDate } from './utils';
-import { MatchResult } from './MatchResult';
-
-type MatchData = [Date, string, string, number, number, MatchResult, string];
+import { WinAnalyser } from './analysers/WinAnalyser';
+import { AverageGoalsAnalysis } from './analysers/AverageGoalsAnalysis';
+import { ConsoleReport } from './reportTargets/ConsoleReport';
+import { Summary } from './Summary';
 
 const reader = new MatchReader(new CsvFileReader('football.csv'));
 reader.load();
 const { matches } = reader;
+const report = new ConsoleReport();
 
-const manWins =
-  matches.filter(
-    (match: MatchData): boolean =>
-      match[1] === 'Man United' && match[5] === MatchResult.HomeWin
-  ).length +
-  matches.filter(
-    (match: MatchData): boolean =>
-      match[2] === 'Man United' && match[5] === MatchResult.AwayWin
-  ).length;
+const manWinsSummary = new Summary(
+  new WinAnalyser('Man United'),
+  new ConsoleReport()
+);
+manWinsSummary.buildAndPrintReport(matches);
 
-console.log(manWins);
-
-console.log(dateStringToDate('15/05/2023'));
+const manAvgGoalsSummary = new Summary(
+  new AverageGoalsAnalysis('Man United'),
+  new ConsoleReport()
+);
+manAvgGoalsSummary.buildAndPrintReport(matches);
