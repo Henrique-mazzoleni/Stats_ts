@@ -1,12 +1,13 @@
 import { MatchReader } from './MatchReader';
+import { CsvFileReader } from './CsvFileReader';
 import { dateStringToDate } from './utils';
 import { MatchResult } from './MatchResult';
 
 type MatchData = [Date, string, string, number, number, MatchResult, string];
 
-const reader = new MatchReader('football.csv');
-reader.read();
-const matches = reader.data;
+const reader = new MatchReader(new CsvFileReader('football.csv'));
+reader.load();
+const { matches } = reader;
 
 const manWins =
   matches.filter(
